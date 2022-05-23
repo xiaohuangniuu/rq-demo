@@ -1,0 +1,74 @@
+type AccountIdentifier/2 = AccountIdentifier/1;
+type Asset = {canister : Text; ctype : Text; id : Nat32; name : Text};
+type AssetHandle = Text;
+type CapIndefiniteEvent =
+  {caller : Principal; details : [(Text, CapDetailValue)]; operation : Text};
+type Listing = {locked : ?Time/1; price : Nat64; seller : Principal};
+type Sale =
+  {
+    buyer : AccountIdentifier/2;
+    expires : Time/1;
+    price : Nat64;
+    subaccount : SubAccount/2;
+    tokens : [TokenIndex/1]
+  };
+type SaleTransaction =
+  {
+    buyer : AccountIdentifier/2;
+    price : Nat64;
+    seller : Principal;
+    time : Time/1;
+    tokens : [TokenIndex/1]
+  };
+type Settlement =
+  {
+    buyer : AccountIdentifier/2;
+    price : Nat64;
+    seller : Principal;
+    subaccount : SubAccount/2
+  };
+type SubAccount/2 = SubAccount/1;
+type TokenIndex/1 = TokenIndex;
+type Transaction =
+  {
+    buyer : AccountIdentifier/2;
+    price : Nat64;
+    seller : Principal;
+    time : Time/1;
+    token : TokenIdentifier/1
+  };
+actor {
+  stable var _assetThumbState : [(AssetHandle, Blob)];
+  stable var _assetsState : [(AssetHandle, Asset)];
+  stable var _capEventsState : [CapIndefiniteEvent];
+  stable var _disbursementsState :
+    [(TokenIndex/1, AccountIdentifier/2, SubAccount/2, Nat64)];
+  stable var _failedSales : [(AccountIdentifier/2, SubAccount/2)];
+  stable var _minter : Principal;
+  stable var _nextSubAccount : Nat;
+  stable var _nextTokenId : Nat32;
+  stable var _ownersState : [(AccountIdentifier/2, [TokenIndex/1])];
+  stable var _paymentsState : [(Principal, [SubAccount/2])];
+  stable var _refundsState : [(Principal, [SubAccount/2])];
+  stable var _registryState : [(TokenIndex/1, AccountIdentifier/2)];
+  stable var _runHeartbeat : Bool;
+  stable var _saleTransactions : [SaleTransaction];
+  stable var _salesSettlementsState : [(AccountIdentifier/2, Sale)];
+  stable var _soldIcp : Nat64;
+  stable var _soldTokens : Nat;
+  stable var _supply : Nat;
+  stable var _tokenAssetsReverseState : [(AssetHandle, TokenIndex/1)];
+  stable var _tokenAssetsState : [(TokenIndex/1, AssetHandle)];
+  stable var _tokenJSONState : [(TokenIndex/1, Text)];
+  stable var _tokenListingState : [(TokenIndex/1, Listing)];
+  stable var _tokenMetadataState : [(TokenIndex/1, Nat32)];
+  stable var _tokenSettlementState : [(TokenIndex/1, Settlement)];
+  stable var _tokensForSale : [TokenIndex/1];
+  stable var _transactions : [Transaction];
+  stable var _usedPaymentAddressess :
+    [(AccountIdentifier/2, Principal, SubAccount/2)];
+  stable var _whitelist : [AccountIdentifier/2];
+  stable var _whitelist2 : [AccountIdentifier/2];
+  stable var capRootBucketId : ?Text;
+  stable var historicExportHasRun : Bool
+};
